@@ -75,6 +75,11 @@ export class DepthRenderer {
     public reverseCulling = false;
 
     /**
+     * If true, will automatically resize to the provided camera's resolution.
+     */
+    public autoResize = false;
+
+    /**
      * @internal
      */
     public static _SceneComponentInitialization: (scene: Scene) => void = (_) => {
@@ -171,6 +176,9 @@ export class DepthRenderer {
         });
 
         this._depthMap.onBeforeBindObservable.add(() => {
+            if (this.autoResize) {
+                this._updateSize();
+            }
             engine._debugPushGroup?.("depth renderer", 1);
         });
 
@@ -372,6 +380,16 @@ export class DepthRenderer {
         }
 
         this._shadersLoaded = true;
+    }
+
+    private _updateSize(): void {
+        // Both render targets and engines have `getRenderWidth`/`getRenderHeight`
+        const output = this._camera?.outputRenderTarget ?? this._scene.getEngine();
+        const width = output.getRenderWidth(true);
+        const height = output.getRenderHeight(true);
+        if (this._depthMap.getRenderWidth() !== width || this._depthMap.getRenderHeight() !== height) {
+            this._depthMap.resize({ width, height });
+        }
     }
 
     /**
