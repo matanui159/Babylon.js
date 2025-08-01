@@ -416,13 +416,16 @@ export class ClusteredLight extends Light {
     /**
      * Adds a light to the clustering system.
      * @param light The light to add
+     * @param removeFromScene Set to true to also remove the light from the scene (true by default)
      */
-    public addLight(light: Light): void {
+    public addLight(light: Light, removeFromScene = true): void {
         if (!ClusteredLight.IsLightSupported(light)) {
             Logger.Warn("Attempting to add a light to cluster that does not support clustering");
             return;
         }
-        this._scene.removeLight(light);
+        if (removeFromScene) {
+            this._scene.removeLight(light);
+        }
         this._lights.push(<PointLight | SpotLight>light);
 
         this._proxyMesh.isVisible = true;
@@ -432,15 +435,18 @@ export class ClusteredLight extends Light {
     /**
      * Removes a light from the clustering system.
      * @param light The light to remove
+     * @param addToScene Set to true to also add the light back to the scene (true by default)
      * @returns the index where the light was in the light list
      */
-    public removeLight(light: Light): number {
+    public removeLight(light: Light, addToScene = true): number {
         const index = this.lights.indexOf(light);
         if (index === -1) {
             return index;
         }
         this._lights.splice(index, 1);
-        this._scene.addLight(light);
+        if (addToScene) {
+            this._scene.addLight(light);
+        }
 
         this._proxyMesh.thinInstanceCount = this._lights.length;
         if (this._lights.length === 0) {

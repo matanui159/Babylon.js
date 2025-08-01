@@ -232,6 +232,7 @@ export abstract class Light extends Node implements ISortableLight {
         }
 
         this._shadowEnabled = value;
+        this._updateClusteredFlag?.();
         this._markMeshesAsLightDirty();
     }
 
@@ -383,6 +384,7 @@ export abstract class Light extends Node implements ISortableLight {
         this.includedOnlyMeshes = [] as AbstractMesh[];
         this.excludedMeshes = [] as AbstractMesh[];
 
+        this._updateClusteredFlag?.(false);
         this._resyncMeshes();
     }
 
@@ -508,6 +510,7 @@ export abstract class Light extends Node implements ISortableLight {
     public override setEnabled(value: boolean): void {
         super.setEnabled(value);
 
+        this._updateClusteredFlag?.(false);
         this._resyncMeshes();
     }
 

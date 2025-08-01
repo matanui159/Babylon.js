@@ -1184,7 +1184,7 @@ export abstract class AbstractMesh extends TransformNode implements IDisposable,
      * @internal
      */
     public _resyncLightSource(light: Light): void {
-        const isIn = light.isEnabled() && light.canAffectMesh(this);
+        const isIn = light.isEnabled() && light.canAffectMesh(this) && !light._isClustered;
 
         const index = this._lightSources.indexOf(light);
         let removed = false;

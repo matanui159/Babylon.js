@@ -65,6 +65,7 @@ export class SpotLight extends ShadowLight {
         }
 
         this._iesProfileTexture = value;
+        this._updateClusteredFlag?.();
 
         if (this._iesProfileTexture && SpotLight._IsTexture(this._iesProfileTexture)) {
             this._iesProfileTexture.onLoadObservable.addOnce(() => {
@@ -206,6 +207,7 @@ export class SpotLight extends ShadowLight {
         }
         this._projectionTexture = value;
         this._projectionTextureDirty = true;
+        this._updateClusteredFlag?.();
         if (this._projectionTexture && !this._projectionTexture.isReady()) {
             if (SpotLight._IsProceduralTexture(this._projectionTexture)) {
                 this._projectionTexture.getEffect().executeWhenCompiled(() => {

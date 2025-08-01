@@ -945,6 +945,7 @@ export class ShadowGenerator implements IShadowGenerator {
     }
 
     protected _initializeGenerator(): void {
+        this._light._updateClusteredFlag?.();
         this._light._markMeshesAsLightDirty();
         this._initializeShadowMap();
     }
