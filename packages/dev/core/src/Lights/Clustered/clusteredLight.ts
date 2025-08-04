@@ -402,9 +402,11 @@ export class ClusteredLight extends Light {
      * @param doNotRecurse Set to true to not recurse into each children (recurse into each children by default)
      * @param disposeMaterialAndTextures Set to true to also dispose referenced materials and textures (false by default)
      */
-    public override dispose(doNotRecurse?: boolean, disposeMaterialAndTextures?: boolean): void {
-        for (const light of this._lights) {
-            light.dispose(doNotRecurse, disposeMaterialAndTextures);
+    public override dispose(doNotRecurse = false, disposeMaterialAndTextures?: boolean): void {
+        if (!doNotRecurse) {
+            for (const light of this._lights) {
+                light.dispose(doNotRecurse, disposeMaterialAndTextures);
+            }
         }
         this._lightDataTexture.dispose();
         this._tileMaskTexture.dispose();

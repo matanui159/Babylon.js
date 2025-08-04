@@ -45,7 +45,7 @@ Object.defineProperty(Scene.prototype, "clusteredLighting", {
             }
         }
         if (this._clusteredLight && !enabled) {
-            this._clusteredLight.dispose();
+            this._clusteredLight.dispose(true, true);
             this._clusteredLight = null;
             update = true;
         }
@@ -64,7 +64,7 @@ Object.defineProperty(Scene.prototype, "clusteredLighting", {
 Light.prototype._updateClusteredFlag = function (this: Light, syncMeshes = true): void {
     const scene = this.getScene();
     const isClustered = scene.clusteredLighting && this.isEnabled() && ClusteredLight.IsLightSupported(this);
-    if (this._isClustered === isClustered) {
+    if (Boolean(this._isClustered) === isClustered) {
         return;
     }
     this._isClustered = isClustered;
